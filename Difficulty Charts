@@ -1,0 +1,63 @@
+local library = loadstring(game:HttpGet(('https://raw.githubusercontent.com/AikaV3rm/UiLib/master/Lib.lua')))()
+
+local w = library:CreateWindow("Difficulty Charts") -- Creates the window
+
+local b = w:CreateFolder("Blatant") -- Creates the folder(U will put here your buttons,etc)
+
+----------------------------
+local player = game:GetService("Players").LocalPlayer
+local char = player.Character
+local ls = player:FindFirstChild("leaderstats")
+----------------------------
+
+b:Button("Next Stage",function()
+    local stage = ls.Stage
+    local addone = stage.Value + 1
+    if workspace:FindFirstChild("Checkpoints") then
+        char.HumanoidRootPart.CFrame = workspace.Checkpoints[addone].CFrame + Vector3.new(0,2,0)
+    elseif workspace:FindFirstChild("Stages") then
+        char.HumanoidRootPart.CFrame = workspace.Stages[addone].CFrame + Vector3.new(0,2,0)
+    end
+end)
+
+b:Slider("Speed",{
+    min = 8; -- min value of the slider
+    max = 50; -- max value of the slider
+    precise = false; -- max 2 decimals
+},function(value)
+    local newchar = game:GetService("Players").LocalPlayer.Character
+    newchar.Humanoid.WalkSpeed = value
+    newchar.Humanoid.Died:Connect(function()
+        newchar.Humanoid.WalkSpeed = value
+    end)
+end)
+
+b:Slider("Jump",{
+    min = 25; -- min value of the slider
+    max = 150; -- max value of the slider
+    precise = false; -- max 2 decimals
+},function(value)
+    local newchar = game:GetService("Players").LocalPlayer.Character
+    newchar.Humanoid.JumpPower = value
+    newchar.Humanoid.JumpHeight = value
+    newchar.Humanoid.Died:Connect(function()
+        newchar.Humanoid.JumpPower = value
+        newchar.Humanoid.JumpHeight = value
+    end)
+    return
+end)
+
+pcall(function()
+	local gmt = getrawmetatable(game)
+	local oldIndex = gmt.__index
+	setreadonly(gmt, false)
+	
+	gmt.__index = newcclosure(function(self, key)
+		if tostring(self) == "Humanoid" and tostring(key) == "WalkSpeed" then
+			return
+        elseif tostring(self) == "Humanoid" and (tostring(key) == "JumpPower" or tostring(key) == "JumpHeight") then
+            return
+		end
+		return oldIndex(self, key)
+	end)
+end)
