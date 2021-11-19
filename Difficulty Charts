@@ -60,9 +60,26 @@ a:Toggle("Auto Farm",function(bool)
     end
 end)
 
-a:Button("Auto Rebirth",function()
+a:Button("Rebirth SILLY DCO ONLY",function()
     if ls.Stage.Value == 161 then
-        game:GetService("ReplicatedStorage").Remotes.Rebirth:FireServer()
+    	local amount
+	local stage = ls:WaitForChild("Stage")
+	if stage.Value >= 101 then
+		amount = 1
+       		game:GetService("ReplicatedStorage").Remotes.Rebirth:InvokeServer(amount)
+	elseif stage.Value >= 121 then
+		amount = 2
+		game:GetService("ReplicatedStorage").Remotes.Rebirth:InvokeServer(amount)
+	elseif stage.Value >= 121 then
+		amount = 2
+		game:GetService("ReplicatedStorage").Remotes.Rebirth:InvokeServer(amount)
+	elseif stage.Value >= 141 then
+		amount = 3
+		game:GetService("ReplicatedStorage").Remotes.Rebirth:InvokeServer(amount)
+	elseif stage.Value >= 161 then
+		amount = 4
+		game:GetService("ReplicatedStorage").Remotes.Rebirth:InvokeServer(amount)
+	end
     end
 end)
 
